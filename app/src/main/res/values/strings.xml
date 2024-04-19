@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Student Finder</string>
+    <string name="msgs_scan_std_id">Scan Student ID</string>
+    <string name="title_activity_student_info">StudentInfoActivity</string>
+</resources>
