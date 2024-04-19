@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "904910846781",
+    "project_id": "student-finder-687bf",
+    "storage_bucket": "student-finder-687bf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904910846781:android:ffab6c926b1a8d3238e354",
+        "android_client_info": {
+          "package_name": "a3.student.finder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoJpZROe38Prm6Y1dKsP4qZ0kIyfsQsfQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
