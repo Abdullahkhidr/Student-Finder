@@ -33,12 +33,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanCustomCode
 import io.github.g00fy2.quickie.config.ScannerConfig
 
 @Composable
-fun EnterIDScreen() {
+fun EnterIDScreen(navController: NavController) {
     val context = LocalContext.current
     AnimatedBackgroundScreen {
         Column(
@@ -102,7 +103,7 @@ fun EnterIDScreen() {
                             setOverlayStringRes(R.string.msgs_scan_std_id)
                         })
                     } else {
-
+                        navController.navigate(Screen.StudentInfoScreen.route)
                     }
                 }, colors = ButtonDefaults.filledTonalButtonColors(
                     contentColor = Color.DarkGray,
