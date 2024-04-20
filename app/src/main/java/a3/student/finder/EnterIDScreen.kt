@@ -52,12 +52,12 @@ fun EnterIDScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .padding(25.dp)
-                .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .background(
                     Color(0.92f, 0.92f, 0.92f, 0.5f),
                     shape = RoundedCornerShape(20.dp)
-                ),
+                )
+                .padding(horizontal = 25.dp, vertical = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
