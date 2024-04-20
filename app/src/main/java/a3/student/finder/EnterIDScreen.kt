@@ -7,6 +7,8 @@ import a3.student.finder.datasource.GetStudentInfo
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,13 +27,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -40,6 +46,7 @@ import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanCustomCode
 import io.github.g00fy2.quickie.config.ScannerConfig
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -60,9 +67,33 @@ fun EnterIDScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
             var idField by remember { mutableStateOf("") }
+            var value by remember { mutableStateOf(360f) }
+            val degreeRotation = animateFloatAsState(
+                targetValue = value,
+                animationSpec = tween(3000)
+            )
+            LaunchedEffect(statusData) {
+                while (statusData == StatusData.Loading) {
+                    value += 360f
+                    value %= Float.MAX_VALUE
+                    delay(3000)
+                }
+            }
+
             Image(
                 painterResource(id = R.drawable.ic_anu), "ANU Logo",
-                modifier = Modifier.size(170.dp)
+                modifier = Modifier
+                    .size(170.dp)
+                    .border(
+                        7.dp,
+                        if (statusData == StatusData.Failed) Color.Red else Color.Transparent,
+                        shape = CircleShape
+                    )
+                    .graphicsLayer {
+//                        rotationY = degreeRotation.value
+//                        rotationX = degreeRotation.value
+                        rotationZ = degreeRotation.value
+                    }
             )
 
             FieldComponent(
@@ -122,7 +153,7 @@ fun EnterIDScreen(navController: NavController) {
                 }
                 onDispose { }
             }
-            LoadingDialog(statusData != StatusData.Loading)
+            //  LoadingDialog(statusData != StatusData.Loading)
             FilledTonalButton(
                 modifier = Modifier.border(2.dp, Color.Gray, shape = CircleShape),
                 onClick = {
