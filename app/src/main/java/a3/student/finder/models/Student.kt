@@ -7,6 +7,7 @@ data class Student(
     val university: String,
     val faculty: String,
     val level: Int,
+    val program: String,
     val GPA: Float,
     val grades: List<StudentGrade>
 )
