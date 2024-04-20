@@ -25,19 +25,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+var studentInfo: Student? = null
+
 @Composable
 fun StudentInfoScreen() {
-    val studentInfo = Student(
-        "2072022102",
-        "303681871234572",
-        "Abdullah Khidr Mohamed Abdelrahim",
-        "ANU",
-        "Computers and Information",
-        2,
-        "General Division",
-        3.1f,
-        grades
-    )
     AnimatedBackgroundScreen {
         Column(
             modifier = Modifier
@@ -47,14 +38,14 @@ fun StudentInfoScreen() {
             Spacer(modifier = Modifier.size(15.dp))
             Text(text = "Student Profile", fontSize = 20.sp, fontWeight = FontWeight.Medium)
             Divider(Modifier.padding(vertical = 10.dp), color = Color.White)
-            StudentInfoAttr(key = "Name", value = studentInfo.name)
-            StudentInfoAttr(key = "University", value = studentInfo.university)
-            StudentInfoAttr(key = "Faculty", value = studentInfo.faculty)
-            StudentInfoAttr(key = "Student ID", value = studentInfo.id)
-            StudentInfoAttr(key = "SSN", value = studentInfo.ssn)
-            StudentInfoAttr(key = "Program", value = studentInfo.program)
-            StudentInfoAttr(key = "Level", value = studentInfo.level.toString())
-            StudentInfoAttr(key = "GPA", value = studentInfo.GPA.toString())
+            StudentInfoAttr(key = "Name", value = studentInfo!!.name)
+            StudentInfoAttr(key = "University", value = studentInfo!!.university)
+            StudentInfoAttr(key = "Faculty", value = studentInfo!!.faculty)
+            StudentInfoAttr(key = "Student ID", value = studentInfo!!.id)
+            StudentInfoAttr(key = "SSN", value = studentInfo!!.ssn)
+            StudentInfoAttr(key = "Program", value = studentInfo!!.program)
+            StudentInfoAttr(key = "Level", value = studentInfo!!.level.toString())
+            StudentInfoAttr(key = "GPA", value = studentInfo!!.GPA.toString())
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
@@ -69,20 +60,24 @@ fun StudentInfoScreen() {
                     modifier = Modifier
                         .horizontalScroll(rememberScrollState())
                 ) {
-                    ColumnTable(title = "Index") { for (i in studentInfo.grades.indices) CellTable(i + 1) }
-                    ColumnTable(title = "Code") { for (i in studentInfo.grades) CellTable(i.courseCode) }
-                    ColumnTable(title = "Course Name") { for (i in studentInfo.grades) CellTable(i.courseName) }
-                    ColumnTable(title = "Grade") { for (i in studentInfo.grades) CellTable(i.grade) }
+                    ColumnTable(title = "Index") {
+                        for (i in studentInfo!!.grades.indices) CellTable(
+                            i + 1
+                        )
+                    }
+                    ColumnTable(title = "Code") { for (i in studentInfo!!.grades) CellTable(i.courseCode) }
+                    ColumnTable(title = "Course Name") { for (i in studentInfo!!.grades) CellTable(i.courseName) }
+                    ColumnTable(title = "Grade") { for (i in studentInfo!!.grades) CellTable(i.grade) }
                     ColumnTable(title = "Grade Description") {
-                        for (i in studentInfo.grades) CellTable(
+                        for (i in studentInfo!!.grades) CellTable(
                             i.gradeDescription
                         )
                     }
-                    ColumnTable(title = "Points") { for (i in studentInfo.grades) CellTable(i.points) }
-                    ColumnTable(title = "Credits") { for (i in studentInfo.grades) CellTable(i.credits) }
-                    ColumnTable(title = "Accountancy") { for (i in studentInfo.grades) CellTable(i.accountancy) }
-                    ColumnTable(title = "Level") { for (i in studentInfo.grades) CellTable(i.level) }
-                    ColumnTable(title = "Year") { for (i in studentInfo.grades) CellTable("${i.year}-${i.year + 1}") }
+                    ColumnTable(title = "Points") { for (i in studentInfo!!.grades) CellTable(i.points) }
+                    ColumnTable(title = "Credits") { for (i in studentInfo!!.grades) CellTable(i.credits) }
+                    ColumnTable(title = "Accountancy") { for (i in studentInfo!!.grades) CellTable(i.accountancy) }
+                    ColumnTable(title = "Level") { for (i in studentInfo!!.grades) CellTable(i.level) }
+                    ColumnTable(title = "Year") { for (i in studentInfo!!.grades) CellTable("${i.year}-${i.year + 1}") }
                 }
             }
             Spacer(modifier = Modifier.size(15.dp))

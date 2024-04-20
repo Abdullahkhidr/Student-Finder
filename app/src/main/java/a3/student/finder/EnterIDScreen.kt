@@ -3,6 +3,9 @@ package a3.student.finder
 
 import a3.student.finder.components.AnimatedBackgroundScreen
 import a3.student.finder.components.FieldComponent
+import a3.student.finder.datasource.GetStudentInfo
+import a3.student.finder.models.Student
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.Image
@@ -23,6 +26,7 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +41,9 @@ import androidx.navigation.NavController
 import io.github.g00fy2.quickie.QRResult
 import io.github.g00fy2.quickie.ScanCustomCode
 import io.github.g00fy2.quickie.config.ScannerConfig
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun EnterIDScreen(navController: NavController) {
@@ -95,6 +102,14 @@ fun EnterIDScreen(navController: NavController) {
                         else -> {}
                     }
                 }
+
+            var gotData by remember { mutableStateOf(false) }
+            DisposableEffect(key1 = gotData) {
+                if (gotData && studentInfo != null) {
+                    navController.navigate(Screen.StudentInfoScreen.route)
+                }
+                onDispose { }
+            }
             FilledTonalButton(
                 modifier = Modifier.border(2.dp, Color.Gray, shape = CircleShape),
                 onClick = {
@@ -103,7 +118,13 @@ fun EnterIDScreen(navController: NavController) {
                             setOverlayStringRes(R.string.msgs_scan_std_id)
                         })
                     } else {
-                        navController.navigate(Screen.StudentInfoScreen.route)
+                        GlobalScope.launch {
+                            studentInfo = GetStudentInfo(idField).getData()
+                            studentInfo?.let {
+                                Log.i("Student Info", studentInfo.toString())
+                            }
+                            gotData = studentInfo != null
+                        }
                     }
                 }, colors = ButtonDefaults.filledTonalButtonColors(
                     contentColor = Color.DarkGray,
