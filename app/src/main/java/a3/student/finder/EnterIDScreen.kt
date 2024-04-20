@@ -4,7 +4,6 @@ package a3.student.finder
 import a3.student.finder.components.AnimatedBackgroundScreen
 import a3.student.finder.components.FieldComponent
 import a3.student.finder.datasource.GetStudentInfo
-import a3.student.finder.models.Student
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -14,7 +13,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -43,11 +41,11 @@ import io.github.g00fy2.quickie.ScanCustomCode
 import io.github.g00fy2.quickie.config.ScannerConfig
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @Composable
 fun EnterIDScreen(navController: NavController) {
     val context = LocalContext.current
+    var statusData by remember { mutableStateOf(StatusData.None) }
     AnimatedBackgroundScreen {
         Column(
             modifier = Modifier
@@ -74,12 +72,26 @@ fun EnterIDScreen(navController: NavController) {
                 if (it.length < 14 && it.all { ch -> Regex("[0-9]").matches("$ch") })
                     idField = it
             }
+
+            suspend fun getUserData() {
+                statusData = StatusData.Loading
+                studentInfo = GetStudentInfo(idField).getData()
+                studentInfo?.let {
+                    Log.i("Student Info", studentInfo.toString())
+                }
+                statusData = if (studentInfo == null) StatusData.Failed
+                else StatusData.Success
+            }
+
             val scanQRCode =
                 rememberLauncherForActivityResult(contract = ScanCustomCode()) {
                     when (it) {
                         is QRResult.QRSuccess -> {
                             idField =
                                 it.content.rawValue.toString().replace(Regex("[^0-9]"), "")
+                            GlobalScope.launch {
+                                getUserData()
+                            }
                         }
 
                         is QRResult.QRMissingPermission -> {
@@ -103,9 +115,7 @@ fun EnterIDScreen(navController: NavController) {
                     }
                 }
 
-            var statusData by remember {
-                mutableStateOf(StatusData.None)
-            }
+
             DisposableEffect(key1 = statusData) {
                 if (statusData == StatusData.Success && studentInfo != null) {
                     navController.navigate(Screen.StudentInfoScreen.route)
@@ -122,13 +132,7 @@ fun EnterIDScreen(navController: NavController) {
                         })
                     } else {
                         GlobalScope.launch {
-                            statusData = StatusData.Loading
-                            studentInfo = GetStudentInfo(idField).getData()
-                            studentInfo?.let {
-                                Log.i("Student Info", studentInfo.toString())
-                            }
-                            statusData = if (studentInfo == null) StatusData.Failed
-                            else StatusData.Success
+                            getUserData()
                         }
                     }
                 }, colors = ButtonDefaults.filledTonalButtonColors(
@@ -147,3 +151,4 @@ fun EnterIDScreen(navController: NavController) {
         }
     }
 }
+
