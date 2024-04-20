@@ -5,8 +5,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Dialog
 
 @Composable
-fun LoadingDialog() {
-    Dialog(onDismissRequest = {}) {
-        CircularProgressIndicator()
+fun LoadingDialog(dismiss: Boolean) {
+    if (!dismiss) {
+        Dialog(onDismissRequest = {}) {
+            CircularProgressIndicator()
+        }
     }
 }

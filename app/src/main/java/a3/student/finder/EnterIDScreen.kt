@@ -103,13 +103,16 @@ fun EnterIDScreen(navController: NavController) {
                     }
                 }
 
-            var gotData by remember { mutableStateOf(false) }
-            DisposableEffect(key1 = gotData) {
-                if (gotData && studentInfo != null) {
+            var statusData by remember {
+                mutableStateOf(StatusData.None)
+            }
+            DisposableEffect(key1 = statusData) {
+                if (statusData == StatusData.Success && studentInfo != null) {
                     navController.navigate(Screen.StudentInfoScreen.route)
                 }
                 onDispose { }
             }
+            LoadingDialog(statusData != StatusData.Loading)
             FilledTonalButton(
                 modifier = Modifier.border(2.dp, Color.Gray, shape = CircleShape),
                 onClick = {
@@ -119,11 +122,13 @@ fun EnterIDScreen(navController: NavController) {
                         })
                     } else {
                         GlobalScope.launch {
+                            statusData = StatusData.Loading
                             studentInfo = GetStudentInfo(idField).getData()
                             studentInfo?.let {
                                 Log.i("Student Info", studentInfo.toString())
                             }
-                            gotData = studentInfo != null
+                            statusData = if (studentInfo == null) StatusData.Failed
+                            else StatusData.Success
                         }
                     }
                 }, colors = ButtonDefaults.filledTonalButtonColors(
