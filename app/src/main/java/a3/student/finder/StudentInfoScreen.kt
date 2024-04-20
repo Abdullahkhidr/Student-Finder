@@ -2,8 +2,10 @@ package a3.student.finder
 
 import a3.student.finder.components.AnimatedBackgroundScreen
 import a3.student.finder.models.Student
+import a3.student.finder.pdfgenerator.GeneratePDFStudentInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,11 +18,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +34,8 @@ var studentInfo: Student? = null
 
 @Composable
 fun StudentInfoScreen() {
+    val context = LocalContext.current
+
     AnimatedBackgroundScreen {
         Column(
             modifier = Modifier
@@ -36,7 +43,21 @@ fun StudentInfoScreen() {
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.size(15.dp))
-            Text(text = "Student Profile", fontSize = 20.sp, fontWeight = FontWeight.Medium)
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Student Profile", fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                Icon(
+                    painterResource(id = R.drawable.ic_file),
+                    "",
+                    modifier = Modifier
+                        .size(30.dp)
+                        .clickable {
+                            GeneratePDFStudentInfo(context, studentInfo!!)
+                        })
+            }
             Divider(Modifier.padding(vertical = 10.dp), color = Color.White)
             StudentInfoAttr(key = "Name", value = studentInfo!!.name)
             StudentInfoAttr(key = "University", value = studentInfo!!.university)
