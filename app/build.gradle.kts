@@ -68,5 +68,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation("io.github.g00fy2.quickie:quickie-unbundled:1.9.0")
+    implementation(libs.quickie.unbundled)
+    implementation(libs.androidx.navigation.compose)
 }
