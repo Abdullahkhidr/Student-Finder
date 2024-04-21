@@ -1,5 +1,7 @@
-package a3.student.finder
+package a3.student.finder.core.navigation
 
+import a3.student.finder.EnterIDScreen
+import a3.student.finder.StudentInfoScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost

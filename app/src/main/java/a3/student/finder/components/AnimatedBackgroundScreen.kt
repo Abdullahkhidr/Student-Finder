@@ -23,11 +23,12 @@ fun AnimatedBackgroundScreen(content: @Composable () -> Unit) {
     var switch by remember { mutableStateOf(true) }
     val animationFirstColor = animateColorAsState(
         targetValue = if (switch) Color(0xFFF3C7CB) else Color(0xFFCF5F6A),
-        animationSpec = tween(2000)
+        animationSpec = tween(2000),
+        label = ""
     )
     val animationSecondColor = animateColorAsState(
         targetValue = if (!switch) Color(0xFFE2DAC0) else Color(0xFFD6CC7F),
-        animationSpec = tween(2000)
+        animationSpec = tween(2000), label = ""
     )
     LaunchedEffect(Unit) {
         while (true) {

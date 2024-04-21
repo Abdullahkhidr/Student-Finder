@@ -1,5 +1,6 @@
 package a3.student.finder
 
+import a3.student.finder.core.navigation.SetupNavGraph
 import a3.student.finder.ui.theme.StudentFinderTheme
 import android.os.Bundle
 import androidx.activity.ComponentActivity

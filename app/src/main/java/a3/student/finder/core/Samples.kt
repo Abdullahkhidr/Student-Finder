@@ -1,4 +1,4 @@
-package a3.student.finder
+package a3.student.finder.core
 
 import a3.student.finder.models.Student
 import a3.student.finder.models.StudentGrade
